@@ -1,0 +1,67 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package visitor {
+    package visitor.impl {
+        class VisitorA
+        class VisitorB
+    }
+}
+visitor.impl--> acceptor.impl
+
+package acceptor {
+    package acceptor.interface{
+        interface Acceptor
+        interface Visitor
+    }
+
+    package acceptor.impl {
+        class AcceptorA
+        class AcceptorB
+    }
+}
+Acceptor --> Visitor
+Visitor --> acceptor.impl
+
+class VisitorA implements Visitor{
+    - {static} string name = 'visitorA'
+
+    + void visit(AcceptorA)
+    + void visit(AcceptorB)
+}
+
+class VisitorB implements Visitor{
+    - {static} string name = 'visitorB'
+
+    + void visit(AcceptorA)
+    + void visit(AcceptorB)
+}
+
+interface Acceptor {
+    + void accept(Visitor)
+}
+
+interface Visitor {
+    + void visit(AcceptorA)
+    + void visit(AcceptorB)
+}
+note right of Visitor
+    If a used language doesn't have overload, like Go,
+    define `void visit(Acceptor)` and check type of Acceptor in the method.
+end note
+
+class AcceptorA implements Acceptor {
+    - {static} string name = 'acceptorA'
+
+    + void accept(Visitor)
+    + string getName()
+}
+
+class AcceptorB implements Acceptor {
+    - {static} string name = 'acceptorB'
+
+    + void accept(Visitor)
+    + string getName()
+}
+
+@enduml
